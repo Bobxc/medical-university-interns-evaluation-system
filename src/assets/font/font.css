@@ -1,0 +1,13 @@
+@font-face {
+    font-family: 'PingFang SC';
+    src: url('PingFang Medium.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Chalet NewYorkNineteenSixty';
+    src: url('Chalet NewYorkNineteenSixty Regular.otf');
+    font-weight: normal;
+    font-style: normal;
+}

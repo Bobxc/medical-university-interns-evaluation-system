@@ -1,0 +1,158 @@
+html,
+body,
+#app {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    min-width: 1440px;
+    font-size: 12px;
+    box-sizing: border-box;
+}
+
+.el-radio__input.is-checked .el-radio__inner {
+    border-color: #5864FF;
+    background: #5864FF;
+}
+
+.el-radio__input.is-checked+.el-radio__label {
+    color: #5864FF;
+}
+
+.el-radio__inner:hover {
+    border-color: #5864FF;
+}
+
+.el-input.is-active .el-input__inner,
+.el-input__inner:focus {
+    border-color: #5864FF;
+}
+
+.el-select .el-input.is-focus .el-input__inner {
+    border-color: #5864FF;
+}
+
+.el-textarea__inner:focus {
+    border-color: #5864FF;
+}
+
+.el-checkbox__inner:hover {
+    border-color: #5864FF;
+}
+
+.el-checkbox__input.is-checked .el-checkbox__inner,
+.el-checkbox__input.is-indeterminate .el-checkbox__inner {
+    border-color: #5864FF;
+    background-color: #5864FF;
+}
+
+.el-input__inner:hover {
+    border-color: #5864FF;
+}
+
+.el-select .el-input__inner:focus {
+    border-color: #5864FF;
+}
+
+.el-button--primary {
+    background-color: #5864FF;
+    border-color: #5864FF;
+}
+
+.el-button--primary:focus,
+.el-button--primary:hover {
+    background: rgba(55, 69, 255, 0.78);
+    border-color: rgba(55, 69, 255, 0.78);
+}
+
+.el-main {
+    padding: 0;
+}
+
+.el-card__body {
+    padding: 0;
+}
+
+.el-card,
+.el-message {
+    border-radius: 6px;
+}
+
+.el-card.is-always-shadow,
+.el-card.is-hover-shadow:focus,
+.el-card.is-hover-shadow:hover {
+    box-shadow: none;
+}
+
+.el-select-dropdown__item.selected {
+    color: #5864FF;
+}
+
+.el-date-table td.today span {
+    color: #5864FF;
+}
+
+.el-date-table td.available:hover {
+    color: #5864FF;
+}
+
+.el-date-table td.current:not(.disabled) span {
+    background-color: #5864FF !important;
+}
+
+.el-pagination.is-background .el-pager li:not(.disabled).active {
+    background: #5864FF;
+}
+
+.el-checkbox__input.is-focus .el-checkbox__inner {
+    border-color: #5864FF;
+}
+
+.el-pagination.is-background .el-pager li:not(.disabled):hover {
+    color: #122073;
+}
+
+.el-pagination.is-background .el-pager li:not(.disabled).active:hover {
+    color: #ffffff;
+}
+
+.el-table::before {
+    height: 0;
+}
+
+
+/* .el-table th,
+.el-table tr {
+    background: #f7f8fb;
+} */
+
+.el-table thead {
+    font-size: 18px;
+    font-family: "PingFang SC";
+    font-weight: 500;
+    color: #122073;
+    opacity: 1;
+}
+
+.el-table {
+    font-size: 16px;
+    font-family: "PingFang SC";
+    font-weight: 400;
+    color: rgba(18, 32, 115, 0.85);
+}
+
+.el-table .cell {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0;
+}
+
+.el-button:active {
+    border-color: #5864ff;
+}
