@@ -173,6 +173,8 @@ export default {
       total: 0,
       currentIndex: 0,
       inputVal: "",
+      stime: "",
+      etime: "",
       navBarData: [
         {
           name: "全部",
@@ -193,22 +195,6 @@ export default {
           value: "选项1",
           label: "黄金糕",
         },
-        {
-          value: "选项2",
-          label: "双皮奶",
-        },
-        {
-          value: "选项3",
-          label: "蚵仔煎",
-        },
-        {
-          value: "选项4",
-          label: "龙须面",
-        },
-        {
-          value: "选项5",
-          label: "北京烤鸭",
-        },
       ],
       specialtyVal: "",
       specialtyOptions: [
@@ -216,44 +202,12 @@ export default {
           value: "选项1",
           label: "黄金糕",
         },
-        {
-          value: "选项2",
-          label: "双皮奶",
-        },
-        {
-          value: "选项3",
-          label: "蚵仔煎",
-        },
-        {
-          value: "选项4",
-          label: "龙须面",
-        },
-        {
-          value: "选项5",
-          label: "北京烤鸭",
-        },
       ],
       classVal: "",
       classOptions: [
         {
           value: "选项1",
           label: "黄金糕",
-        },
-        {
-          value: "选项2",
-          label: "双皮奶",
-        },
-        {
-          value: "选项3",
-          label: "蚵仔煎",
-        },
-        {
-          value: "选项4",
-          label: "龙须面",
-        },
-        {
-          value: "选项5",
-          label: "北京烤鸭",
         },
       ],
       tableData: [],
@@ -287,13 +241,19 @@ export default {
     },
     /* 获取学生实习培训列表(全部) */
     getTrainingListData() {
-      this.loading = true;
+      let queryJson = {
+        keyword: this.inputVal,
+        stime: this.stime,
+        etime: this.etime,
+      };
       let params = {
         userid: window.sessionStorage.getItem("userid"),
         page: this.page,
         size: this.size,
         sord: "F_CreateDate",
+        queryJson: JSON.stringify(queryJson),
       };
+      this.loading = true;
       getTrainingList(params).then((res) => {
         this.loading = false;
         console.log(res);
@@ -385,22 +345,7 @@ export default {
     },
 
     searchVal() {
-      if (this.inputVal !== "") {
-        let reg = new RegExp(this.inputVal);
-        this.tableData = this.tableData.filter((item) => {
-          if (reg.test(item.smajor)) {
-            return item;
-          }
-          if (reg.test(item.sgrade)) {
-            return item;
-          }
-          if (reg.test(item.stuname)) {
-            return item;
-          }
-        });
-      } else {
-        this.getTrainingListData();
-      }
+      this.getTrainingListData();
     },
   },
 };

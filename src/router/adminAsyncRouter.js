@@ -220,6 +220,15 @@ module.exports = [{
         }
     },
     {
+        path: '/admin/diseaseset',
+        component: () =>
+            import ('@/components/admin/trainingPractice/diseaseSet'),
+        meta: {
+            name: '考核内容设置',
+            flag: 0,
+        }
+    },
+    {
         path: '/admin/infolist',
         component: () =>
             import ('@/components/admin/informationRelease/index'),

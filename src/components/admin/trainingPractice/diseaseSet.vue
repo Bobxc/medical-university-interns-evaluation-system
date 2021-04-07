@@ -4,91 +4,113 @@
       <el-row type="flex" justify="space-between">
         <el-col class="title-card-first-col" :span="20">
           <span class="title-card-name">{{ f_name }}</span>
-          <!-- <img src="@/assets/image/路径 1085.png" alt="" /> -->
         </el-col>
         <el-col class="title-card-second-col" :span="6">
           <div class="card-btn-add" @click="addDialogVisible = true">
             <img src="@/assets/image/组 2094.png" alt="" />
             <span>添加科室</span>
           </div>
-          <!-- <div class="card-btn-delete">
-            <img src="@/assets/image/组 1365.png" alt="" />
-            <span>删除科室</span>
-          </div> -->
         </el-col>
       </el-row>
     </el-card>
     <el-card class="container-body">
-      <div style="display: flex; flex-wrap: wrap; justify-items: start">
+      <div>
         <div class="box" v-for="(item, index) in tableData" :key="index">
           <el-row type="flex" align="middle" style="margin-bottom: 18px">
-            <!-- <el-checkbox v-model="item.checked">{{ item.name }}</el-checkbox> -->
             <div class="title-name">{{ item.name }}</div>
-            <!-- <img
-              style="margin-left: 12px; width: 16px; height: 16px"
-              src="@/assets/image/路径 1085.png"
-              alt=""
-            /> -->
           </el-row>
-          <el-row class="row-header">
-            <!-- <el-col :span="4" class="col-delete">删除</el-col> -->
-            <el-col :span="16" :offset="1">项目</el-col>
-            <!-- <el-col :span="4" class="col-edit">编辑</el-col> -->
-          </el-row>
-          <div class="main-body">
-            <el-row
-              class="row-body"
-              v-for="(sub, index) in item.child"
-              :key="index"
-              :style="{
-                background:
-                  index % 2 == 0
-                    ? 'rgba(234, 236, 246, 0.53)'
-                    : 'rgba(234, 236, 246, 1)',
-              }"
-            >
-              <!-- <el-col :span="4" v-show="!sub.iptShow" class="col-delete"
-                ><div @click="deleteProject(sub)" style="cursor: pointer;"><img src="@/assets/image/组 1771.png" alt="" /></div
-              ></el-col> -->
-              <el-col :span="16" :offset="1" v-show="!sub.iptShow">{{
-                sub.name
-              }}</el-col>
-              <!-- <el-col :span="4" v-show="!sub.iptShow" class="col-edit"
-                ><img
-                  src="@/assets/image/路径 1085.png"
-                  @click="editTitle(sub)"
-                  alt=""
-                  style="cursor: pointer"
-              /></el-col> -->
-              <el-col :span="20" v-show="sub.iptShow"
-                ><input type="text" v-model="sub.name"
-              /></el-col>
-              <el-col :span="4" v-show="sub.iptShow"
-                ><div class="save" @click="save(item, sub)">保存</div></el-col
+          <div style="display: flex; width: 100%">
+            <div style="width: 100%; display: flex">
+              <div
+                v-for="(dep, index) in item.child"
+                :key="index"
+                style="width: 30%; margin-right: 10px; flex-shrink: 0"
               >
-            </el-row>
+                <el-row class="row-header">
+                  <el-col :span="16" :offset="1">{{ dep.name }}</el-col>
+                </el-row>
+                <div class="main-body">
+                  <el-row
+                    class="row-body"
+                    v-for="(sub, index) in dep.child"
+                    :key="index"
+                    :style="{
+                      background:
+                        index % 2 == 0
+                          ? 'rgba(234, 236, 246, 0.53)'
+                          : 'rgba(234, 236, 246, 1)',
+                    }"
+                  >
+                    <el-col :span="16" :offset="1" v-show="!sub.iptShow">{{
+                      sub.name
+                    }}</el-col>
+                    <el-col :span="20" v-show="sub.iptShow"
+                      ><input type="text" v-model="sub.name"
+                    /></el-col>
+                    <el-col :span="4" v-show="sub.iptShow"
+                      ><div class="save" @click="save(item, sub)">
+                        保存
+                      </div></el-col
+                    >
+                  </el-row>
 
-            <el-row
-              class="row-add"
-              v-show="item.addShow"
-              @click.native="add(item)"
-            >
-              <el-col :span="4" class="add-icon"
-                ><img src="@/assets/image/add.png" alt=""
-              /></el-col>
-              <el-col :span="20" class="add-text">添加项目</el-col>
-            </el-row>
-            <el-row class="row-input" v-show="!item.addShow">
-              <el-col :span="16"
-                ><input type="text" placeholder="请输入" v-model="item.iptVal"
-              /></el-col>
-              <el-col :span="4"
-                ><div class="add" @click="saveAdd(item)">保存</div></el-col
-              >
-              <el-col :span="4"
-                ><div class="cancel" @click="cancel(item)">取消</div></el-col
-              >
-            </el-row>
+                  <el-row
+                    class="row-add"
+                    v-show="dep.addShow"
+                    @click.native="add(dep)"
+                  >
+                    <el-col :span="4" class="add-icon"
+                      ><img src="@/assets/image/add.png" alt=""
+                    /></el-col>
+                    <el-col :span="20" class="add-text">添加子节点</el-col>
+                  </el-row>
+                  <el-row class="row-input" v-show="!dep.addShow">
+                    <el-col :span="16"
+                      ><input
+                        type="text"
+                        placeholder="请输入"
+                        v-model="dep.iptVal"
+                    /></el-col>
+                    <el-col :span="4"
+                      ><div class="add" @click="saveAdd(dep)">保存</div></el-col
+                    >
+                    <el-col :span="4"
+                      ><div class="cancel" @click="cancel(dep)">
+                        取消
+                      </div></el-col
+                    >
+                  </el-row>
+                </div>
+              </div>
+              <div style="width: 30%; flex-shrink: 0">
+                <el-row
+                  v-show="item.addShow"
+                  class="row-add"
+                  @click.native="addProject(item, index)"
+                >
+                  <el-col :span="4" class="add-icon"
+                    ><img src="@/assets/image/add.png" alt=""
+                  /></el-col>
+                  <el-col :span="20" class="add-text">添加项目</el-col>
+                </el-row>
+                <el-row class="row-input" v-show="!item.addShow">
+                  <el-col :span="16"
+                    ><input
+                      type="text"
+                      placeholder="请输入"
+                      v-model="item.iptVal"
+                  /></el-col>
+                  <el-col :span="4"
+                    ><div class="add" @click="saveAdd(item)">保存</div></el-col
+                  >
+                  <el-col :span="4"
+                    ><div class="cancel" @click="cancel(item)">
+                      取消
+                    </div></el-col
+                  >
+                </el-row>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -132,7 +154,6 @@ export default {
       type: "",
       addDialogVisible: false,
       department: "",
-      // project: "",
       tableData: [],
       oldTableData: [],
     };
@@ -186,16 +207,11 @@ export default {
                   ? item.child.map((sub) => ({
                       ...sub,
                       name: sub.name,
+                      addShow: true,
                       iptShow: false,
+                      iptVal: "",
                     }))
                   : [],
-              // child:
-              //   item.child !== undefined
-              //     ? item.child.map((sub) => ({
-              //         ...sub,
-              //         iptShow: false,
-              //       }))
-              //     : [],
             }));
             console.log(this.tableData);
           } else {
@@ -258,6 +274,8 @@ export default {
                               ? item.child.map((sub) => ({
                                   ...sub,
                                   iptShow: false,
+                                  addShow: true,
+                                  iptVal: "",
                                 }))
                               : [],
                         }));
@@ -297,6 +315,8 @@ export default {
                     ? item.child.map((sub) => ({
                         ...sub,
                         iptShow: false,
+                        addShow: true,
+                        iptVal: "",
                       }))
                     : [],
               }));
@@ -352,7 +372,12 @@ export default {
       item.addShow = false;
       console.log(item);
     },
+    addProject(item, index) {
+      console.log(item, index);
+      item.addShow = false;
+    },
     cancel(item) {
+      console.log(item);
       item.addShow = true;
       item.iptVal = "";
     },
@@ -367,7 +392,7 @@ export default {
       console.log(data);
       if (item.iptVal == "") {
         this.$message({
-          message: "请输入项目名称！",
+          message: "请输入名称！",
           type: "warning",
           center: true,
         });
@@ -563,9 +588,10 @@ export default {
     box-sizing: border-box;
     overflow: auto;
     .box {
-      width: 30%;
-      margin-right: 40px;
+      // width: 30%;
+      // margin-right: 40px;
       margin-bottom: 40px;
+      overflow-x: auto;
       .title-name {
         font-size: 18px;
         font-family: "PingFang SC";
@@ -655,7 +681,7 @@ export default {
             color: #ffffff;
           }
         }
-        .row-input {
+        /* .row-input {
           height: 48px;
           display: flex;
           align-items: center;
@@ -703,7 +729,7 @@ export default {
             font-weight: 400;
             color: #ffffff;
           }
-        }
+        } */
         .row-add {
           display: flex;
           align-items: center;
@@ -738,6 +764,20 @@ export default {
         /*滚动条里面轨道背景*/
         border-radius: 10px;
       }
+    }
+    .box::-webkit-scrollbar {
+      /*滚动条整体样式*/
+      width: 30px;
+      height: 10px;
+    }
+    .box::-webkit-scrollbar-thumb {
+      /*滚动条里面的滑块*/
+      border-radius: 9px;
+      background: #e3e4ee;
+    }
+    .box::-webkit-scrollbar-track {
+      /*滚动条里面轨道背景*/
+      border-radius: 10px;
     }
   }
   .add-dialog {
@@ -775,6 +815,74 @@ export default {
     font-family: "PingFang SC";
     font-weight: 400;
     color: #ffffff;
+  }
+  .row-add {
+    display: flex;
+    align-items: center;
+    height: 48px;
+    background: rgba(234, 236, 246, 0.53);
+    cursor: pointer;
+    .add-icon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .add-text {
+      font-size: 16px;
+      font-family: "PingFang SC";
+      font-weight: 400;
+      color: #5864ff;
+      opacity: 1;
+    }
+  }
+  .row-input {
+    height: 48px;
+    display: flex;
+    align-items: center;
+    background: rgba(234, 236, 246, 0.23);
+    input {
+      width: 80%;
+
+      font-size: 16px;
+      font-family: "PingFang SC";
+      font-weight: 400;
+      color: #122073;
+      opacity: 1;
+      border: none;
+      outline: none;
+      background: none;
+      margin-left: 25px;
+    }
+    .add {
+      width: 46px;
+      height: 34px;
+      background: #5864ff;
+      opacity: 1;
+      border-radius: 4px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      font-size: 16px;
+      font-family: "PingFang SC";
+      font-weight: 400;
+      color: #ffffff;
+    }
+    .cancel {
+      width: 46px;
+      height: 34px;
+      background: #c9cbd8;
+      opacity: 1;
+      border-radius: 4px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      font-size: 16px;
+      font-family: "PingFang SC";
+      font-weight: 400;
+      color: #ffffff;
+    }
   }
 }
 </style>

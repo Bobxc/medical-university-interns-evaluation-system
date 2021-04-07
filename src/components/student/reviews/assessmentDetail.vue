@@ -166,7 +166,7 @@
         </el-row>
       </el-card>
       <!-- 反馈给管理人员的相关问题 -->
-      <el-card class="feedback-question-card">
+      <el-card class="feedback-question-card" v-if="false">
         <el-row class="feedback-question-title">
           <div></div>
           <span>反馈给管理人员的相关问题</span>
@@ -921,8 +921,8 @@ export default {
       }
     }
     .student-diary-card {
-      height: 480px;
-      margin-bottom: 80px;
+      // height: 480px;
+      // margin-bottom: 80px;
       .student-diary-title {
         height: 50px;
         display: flex;

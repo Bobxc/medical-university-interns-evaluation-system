@@ -928,8 +928,8 @@ export default {
       }
     }
     .student-diary-card {
-      height: 480px;
-      margin-bottom: 80px;
+      // height: 480px;
+      // margin-bottom: 80px;
       .student-diary-title {
         height: 50px;
         display: flex;

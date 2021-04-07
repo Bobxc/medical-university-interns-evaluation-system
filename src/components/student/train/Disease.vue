@@ -221,17 +221,20 @@ export default {
               item.child !== undefined
                 ? item.child.map((sub) => ({
                     ...sub,
-                    child: sub.child.map((dep) => ({
-                      ...dep,
-                      value:
-                        this.hasContentRootData.find(
-                          (val) => val.F_AssessmentContentId == dep.id
-                        ) !== undefined
-                          ? this.hasContentRootData.find(
-                              (val) => val.F_AssessmentContentId == dep.id
-                            ).F_Times
-                          : 0,
-                    })),
+                    child:
+                      sub.child !== undefined
+                        ? sub.child.map((dep) => ({
+                            ...dep,
+                            value:
+                              this.hasContentRootData.find(
+                                (val) => val.F_AssessmentContentId == dep.id
+                              ) !== undefined
+                                ? this.hasContentRootData.find(
+                                    (val) => val.F_AssessmentContentId == dep.id
+                                  ).F_Times
+                                : 0,
+                          }))
+                        : "",
                   }))
                 : "",
           }));

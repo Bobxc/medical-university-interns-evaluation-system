@@ -35,6 +35,7 @@
         :body-style="{ padding: '0px' }"
         shadow="never"
         class="evaluation-teaching-detail-container-card"
+        v-if="false"
       >
         <div class="detail-item">
           <el-row class="title-row">
@@ -149,6 +150,7 @@
         :body-style="{ padding: '0px' }"
         shadow="never"
         class="student-feedback-question-card"
+        v-if="false"
       >
         <el-row class="student-feedback-question-title">
           <div></div>

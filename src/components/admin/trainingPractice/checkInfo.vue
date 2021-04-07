@@ -48,7 +48,7 @@
     <el-dialog title="是否读取旧版本的考核表?" :visible.sync="outerVisible">
       <el-dialog
         width="30%"
-        title="请输入版本号"
+        title="请输入新版本号"
         :visible.sync="noKhTableVisible"
         @closed="cancelVerson"
         append-to-body
@@ -62,7 +62,7 @@
 
       <el-dialog
         width="30%"
-        title="请输入版本号"
+        title="请输入新版本号"
         :visible.sync="yesKhTableVisible"
         @closed="cancelVerson2"
         append-to-body
@@ -150,14 +150,27 @@ export default {
     },
     /* to详情页 */
     toDetail(data) {
-      this.$router.push({
-        path: "/admin/practicerecord",
-        query: {
-          f_id: data.f_id,
-          f_name: data.f_name,
-          type: "detail",
-        },
-      });
+      console.log(data);
+      if (data.f_assessment == 3) {
+        console.log("轮转期间学习病种记录");
+        this.$router.push({
+          path: "/admin/diseaseset",
+          query: {
+            f_id: data.f_id,
+            f_name: data.f_name,
+            type: "detail",
+          },
+        });
+      } else {
+        this.$router.push({
+          path: "/admin/practicerecord",
+          query: {
+            f_id: data.f_id,
+            f_name: data.f_name,
+            type: "detail",
+          },
+        });
+      }
     },
     /* 切换页码 */
     handleCurrentChange(newPage) {
@@ -168,7 +181,7 @@ export default {
       //不赋值新增
       if (this.f_version == "") {
         this.$message({
-          message: "请输入版本号",
+          message: "请输入新版本号",
           type: "warning",
           center: true,
         });
@@ -178,18 +191,32 @@ export default {
           F_Assessment: this.f_assessment,
           F_Version: this.f_version,
         };
+        this.loading = true;
         postAddAssessmentSettings(data).then((res) => {
+          this.loading = false;
           if (res.code == 100) {
-            this.$router.push({
-              // path: "/admin/addcheckinfo",
-              path: "/admin/practicerecord",
-              query: {
-                f_id: res.data,
-                f_name: this.f_name,
-                f_assessment: this.f_assessment,
-                f_version: this.f_version,
-              },
-            });
+            if (this.f_assessment == 3) {
+              this.$router.push({
+                path: "/admin/diseaseset",
+                query: {
+                  f_id: res.data,
+                  f_name: this.f_name,
+                  f_assessment: this.f_assessment,
+                  f_version: this.f_version,
+                },
+              });
+            } else {
+              this.$router.push({
+                // path: "/admin/addcheckinfo",
+                path: "/admin/practicerecord",
+                query: {
+                  f_id: res.data,
+                  f_name: this.f_name,
+                  f_assessment: this.f_assessment,
+                  f_version: this.f_version,
+                },
+              });
+            }
           } else {
             this.$message({
               message: "新增考核表失败！",
@@ -205,7 +232,7 @@ export default {
       //赋值
       if (this.f_version2 == "") {
         this.$message({
-          message: "请输入版本号",
+          message: "请输入新版本号",
           type: "warning",
           center: true,
         });
@@ -215,8 +242,10 @@ export default {
         let params = {
           type: Number(this.f_assessment),
         };
+        this.loading = true;
         getOldAssessmentContent(params).then((res) => {
           if (res.code !== 100) {
+            this.loading = false;
             this.$message({
               message: "获取旧考核表失败！",
               type: "error",
@@ -231,6 +260,7 @@ export default {
             };
             postAddAssessmentSettings(data).then((res) => {
               if (res.code !== 100) {
+                this.loading = false;
                 this.$message({
                   message: "新增考核表失败！",
                   type: "error",
@@ -239,62 +269,171 @@ export default {
               } else {
                 this.f_assessmentid = res.data;
                 if (this.oldTableData.length) {
-                  this.oldTableData.map((item) => {
-                    let data = {
-                      F_AssessmentId: this.f_assessmentid,
-                      F_Name: item.name,
-                      F_ParentId: 0,
-                    };
-                    postSaveAssessmentContent(data).then((res) => {
-                      if (res.code !== 100) {
-                        this.$message({
-                          message: "请求错误！",
-                          type: "error",
-                          center: true,
-                        });
-                      } else {
-                        console.log(item);
-                        if (item.child) {
-                          item.child.map((sub) => {
-                            let data = {
-                              F_AssessmentId: this.f_assessmentid,
-                              F_Name: sub.name,
-                              F_ParentId: res.data,
-                            };
-                            postSaveAssessmentContent(data).then((res) => {
-                              if (res.code !== 100) {
-                                this.$message({
-                                  message: "请求错误！",
-                                  type: "error",
-                                  center: true,
-                                });
-                              } else {
-                                this.$router.push({
-                                  path: "/admin/practicerecord",
-                                  query: {
-                                    f_id: this.f_assessmentid,
-                                    f_name: this.f_name,
-                                    type: "detail",
-                                  },
-                                });
-                              }
-                            });
+                  if (this.f_assessment == 3) {
+                    this.oldTableData.map((item) => {
+                      let data = {
+                        F_AssessmentId: this.f_assessmentid,
+                        F_Name: item.name,
+                        F_ParentId: 0,
+                      };
+                      postSaveAssessmentContent(data).then((res) => {
+                        this.loading = false;
+                        if (res.code !== 100) {
+                          this.$message({
+                            message: "请求错误！",
+                            type: "error",
+                            center: true,
                           });
                         } else {
-                          this.$router.push({
-                            path: "/admin/practicerecord",
-                            query: {
-                              f_id: this.f_assessmentid,
-                              f_name: this.f_name,
-                              type: "detail",
-                            },
-                          });
+                          console.log(item);
+                          if (item.child) {
+                            item.child.map((sub) => {
+                              let data = {
+                                F_AssessmentId: this.f_assessmentid,
+                                F_Name: sub.name,
+                                F_ParentId: res.data,
+                              };
+                              postSaveAssessmentContent(data).then((res) => {
+                                if (res.code !== 100) {
+                                  this.$message({
+                                    message: "请求错误！",
+                                    type: "error",
+                                    center: true,
+                                  });
+                                } else {
+                                  if (sub.child) {
+                                    sub.child.map((dep) => {
+                                      let data = {
+                                        F_AssessmentId: this.f_assessmentid,
+                                        F_Name: dep.name,
+                                        F_ParentId: res.data,
+                                      };
+                                      postSaveAssessmentContent(data).then(
+                                        (res) => {
+                                          if (res.code !== 100) {
+                                            this.$message({
+                                              message: "请求错误！",
+                                              type: "error",
+                                              center: true,
+                                            });
+                                          } else {
+                                            this.$router.push({
+                                              path: "/admin/diseaseset",
+                                              query: {
+                                                f_id: this.f_assessmentid,
+                                                f_name: this.f_name,
+                                                type: "detail",
+                                              },
+                                            });
+                                          }
+                                        }
+                                      );
+                                    });
+                                  } else {
+                                    this.$router.push({
+                                      path: "/admin/diseaseset",
+                                      query: {
+                                        f_id: this.f_assessmentid,
+                                        f_name: this.f_name,
+                                        type: "detail",
+                                      },
+                                    });
+                                  }
+                                }
+                              });
+                            });
+                          } else {
+                            this.$router.push({
+                              path: "/admin/diseaseset",
+                              query: {
+                                f_id: this.f_assessmentid,
+                                f_name: this.f_name,
+                                type: "detail",
+                              },
+                            });
+                          }
                         }
-                      }
+                      });
                     });
-                  });
+                  } else {
+                    this.oldTableData.map((item) => {
+                      let data = {
+                        F_AssessmentId: this.f_assessmentid,
+                        F_Name: item.name,
+                        F_ParentId: 0,
+                      };
+                      postSaveAssessmentContent(data).then((res) => {
+                        this.loading = false;
+                        if (res.code !== 100) {
+                          this.$message({
+                            message: "请求错误！",
+                            type: "error",
+                            center: true,
+                          });
+                        } else {
+                          console.log(item);
+                          if (item.child) {
+                            item.child.map((sub) => {
+                              let data = {
+                                F_AssessmentId: this.f_assessmentid,
+                                F_Name: sub.name,
+                                F_ParentId: res.data,
+                              };
+                              postSaveAssessmentContent(data).then((res) => {
+                                if (res.code !== 100) {
+                                  this.$message({
+                                    message: "请求错误！",
+                                    type: "error",
+                                    center: true,
+                                  });
+                                } else {
+                                  this.$router.push({
+                                    path: "/admin/practicerecord",
+                                    query: {
+                                      f_id: this.f_assessmentid,
+                                      f_name: this.f_name,
+                                      type: "detail",
+                                    },
+                                  });
+                                }
+                              });
+                            });
+                          } else {
+                            this.$router.push({
+                              path: "/admin/practicerecord",
+                              query: {
+                                f_id: this.f_assessmentid,
+                                f_name: this.f_name,
+                                type: "detail",
+                              },
+                            });
+                          }
+                        }
+                      });
+                    });
+                  }
                 } else {
                   //直接进详情页
+                  this.loading = false;
+                  if (this.f_assessment == 3) {
+                    this.$router.push({
+                      path: "/admin/diseaseset",
+                      query: {
+                        f_id: this.f_assessmentid,
+                        f_name: this.f_name,
+                        type: "detail",
+                      },
+                    });
+                  } else {
+                    this.$router.push({
+                      path: "/admin/practicerecord",
+                      query: {
+                        f_id: this.f_assessmentid,
+                        f_name: this.f_name,
+                        type: "detail",
+                      },
+                    });
+                  }
                 }
               }
             });
